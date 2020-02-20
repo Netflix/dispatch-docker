@@ -1,0 +1,25 @@
+version: "3.4"
+x-restart-policy: &restart_policy
+  restart: unless-stopped
+x-dispatch-defaults: &dispatch_defaults
+  <<: *restart_policy
+  build:
+    context: ./dispatch
+    args:
+      - DISPATCH_IMAGE
+  image: dispatch-local
+  depends_on:
+    - postgres
+services:
+  postgres:
+    <<: *restart_policy
+    image: "postgres:9.6"
+    volumes:
+      - "dispatch-postgres:/var/lib/postgresql/data"
+  web:
+    <<: *dispatch_defaults
+  dispatch-scheduler:
+    <<: *dispatch_defaults
+volumes:
+  dispatch-postgres:
+    external: true
