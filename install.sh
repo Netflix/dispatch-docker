@@ -77,7 +77,6 @@ echo "Building and tagging Docker images..."
 echo ""
 # Build the dispatch image first
 docker-compose pull --ignore-pull-failures
-docker build
 docker-compose build --force-rm web
 docker-compose build --force-rm
 echo ""
