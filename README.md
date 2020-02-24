@@ -13,7 +13,7 @@ Official bootstrap for running your own `Dispatch` with [Docker](https://www.doc
 
 ## Setup
 
-To get started with all the defaults, simply clone the repo and run `./docker/install.sh` in your local check-out.
+To get started with all the defaults, simply clone the repo and run `./install.sh` in your local check-out.
 
 There may need to be modifications to the included example config files (`.env`) to accommodate your needs or your environment (such as adding Google credentials). If you want to perform these, do them before you run the install script and copy them without the `.example` extensions in the name before running the `install.sh` script.
 
