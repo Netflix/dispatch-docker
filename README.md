@@ -1,4 +1,4 @@
-# Dispatch [![Build Status][build-status-image]][build-status-url]
+# Dispatch
 
 Official bootstrap for running your own `Dispatch` with [Docker](https://www.docker.com/).
 
