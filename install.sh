@@ -68,7 +68,7 @@ ensure_file_from_example $DISPATCH_EXTRA_REQUIREMENTS
 echo ""
 echo "Generating secret key..."
 # This is to escape the secret key to be used in sed below
-SECRET_KEY=$(head /dev/urandom | tr -dc "a-z0-9@#%^&*(-_=+)" | head -c 50 | sed -e 's/[\/&]/\\&/g')
+SECRET_KEY=$(head /dev/urandom | env LC_CTYPE=C tr -dc "a-z0-9@#%^&*(-_=+)" | head -c 50 | sed -e 's/[\/&]/\\&/g')
 sed -i -e 's/^SECRET_KEY=.*$/SECRET_KEY= '"'$SECRET_KEY'"'/' $DISPATCH_CONFIG_ENV
 echo "Secret key written to $DISPATCH_CONFIG_ENV"
 
