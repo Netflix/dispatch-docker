@@ -7,8 +7,6 @@ x-dispatch-defaults: &dispatch_defaults
     - .env
   build:
     context: https://github.com/Netflix/dispatch.git#master:docker
-    args:
-      - DISPATCH_IMAGE
   image: dispatch-local
   depends_on:
     - postgres
