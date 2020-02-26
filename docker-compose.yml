@@ -3,6 +3,8 @@ x-restart-policy: &restart_policy
   restart: unless-stopped
 x-dispatch-defaults: &dispatch_defaults
   <<: *restart_policy
+  env_file:
+    - .env
   build:
     context: https://github.com/Netflix/dispatch.git#master:docker
     args:
