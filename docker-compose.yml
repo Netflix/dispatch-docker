@@ -20,8 +20,10 @@ services:
       - "dispatch-postgres:/var/lib/postgresql/data"
   web:
     <<: *dispatch_defaults
+    command: ["server", "start", "dispatch.main:app"]
   dispatch-scheduler:
     <<: *dispatch_defaults
+    command: ["scheduler", "start"]
 volumes:
   dispatch-postgres:
     external: true
