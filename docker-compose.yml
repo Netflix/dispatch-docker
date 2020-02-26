@@ -4,9 +4,8 @@ x-restart-policy: &restart_policy
 x-dispatch-defaults: &dispatch_defaults
   <<: *restart_policy
   build:
-    context: https://github.com/Netflix/dispatch.git#master:docker
-    args:
-      - DISPATCH_IMAGE
+    context: https://github.com/Netflix/dispatch.git#master
+    dockerfile: docker/Dockerfile
   image: dispatch-local
   depends_on:
     - postgres
