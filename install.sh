@@ -103,13 +103,15 @@ if [[ $(docker volume ls -q --filter name=dispatch-postgres) && $(docker run --r
     docker volume rm dispatch-postgres-new
 fi
 
-echo ""
-echo "Setting up database..."
-if [ $CI ]; then
-  docker-compose run --rm dispatch database upgrade --noinput
-else
-  docker-compose run --rm dispatch database upgrade
-fi
+# TODO Fix database upgrade/migration step
+# https://github.com/Netflix/dispatch-docker/issues/11
+#echo ""
+#echo "Setting up database..."
+#if [ $CI ]; then
+#  docker-compose run --rm web database upgrade --noinput
+#else
+#  docker-compose run --rm web database upgrade
+#fi
 
 cleanup
 
