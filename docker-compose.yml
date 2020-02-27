@@ -6,8 +6,10 @@ x-dispatch-defaults: &dispatch_defaults
   env_file:
     - .env
   build:
-    # TODO Update when https://github.com/Netflix/dispatch/pull/53 lands
-    context: https://github.com/TheDahv/dispatch.git#develop__fix-docker-image-startup:.
+    # Pro-tip: point this to a relative directory containing the Dispatch
+    # project root to pick up changes from your dev environment
+    # (e.g., ../dispatch-root)
+    context: https://github.com/Netflix/dispatch.git#master:.
   image: dispatch-local
   depends_on:
     - postgres
