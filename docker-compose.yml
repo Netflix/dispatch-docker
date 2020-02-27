@@ -9,7 +9,7 @@ x-dispatch-defaults: &dispatch_defaults
     # Pro-tip: point this to a relative directory containing the Dispatch
     # project root to pick up changes from your dev environment
     # (e.g., ../dispatch-root)
-    context: https://github.com/Netflix/dispatch.git#master:.
+    context: https://github.com/Netflix/dispatch.git#develop:.
   image: dispatch-local
   depends_on:
     - postgres
