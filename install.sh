@@ -76,11 +76,14 @@ echo ""
 echo "Building and tagging Docker images..."
 echo ""
 # Build the dispatch image first
+# Once successfully built these lines can be commented out
 docker-compose pull --ignore-pull-failures
 docker-compose build --force-rm web
 docker-compose build --force-rm
 echo ""
 echo "Docker images built."
+
+docker-compose up -d postgres
 
 # Very naively check whether there's an existing dispatch-postgres volume and the PG version in it
 if [[ $(docker volume ls -q --filter name=dispatch-postgres) && $(docker run --rm -v dispatch-postgres:/db busybox cat /db/PG_VERSION 2>/dev/null) == "9.5" ]]; then
@@ -106,9 +109,11 @@ fi
 echo ""
 echo "Setting up database..."
 if [ $CI ]; then
-  docker-compose run --rm dispatch database upgrade --noinput
+  docker-compose run web --help
+  docker-compose run web database upgrade --no-input
 else
-  docker-compose run --rm dispatch database upgrade
+  docker-compose run web --help
+  docker-compose run web database upgrade
 fi
 
 cleanup
