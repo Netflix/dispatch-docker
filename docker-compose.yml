@@ -3,9 +3,13 @@ x-restart-policy: &restart_policy
   restart: unless-stopped
 x-dispatch-defaults: &dispatch_defaults
   <<: *restart_policy
+  env_file:
+    - .env
   build:
-    context: https://github.com/Netflix/dispatch.git#develop
-    dockerfile: docker/Dockerfile
+    # Pro-tip: point this to a relative directory containing the Dispatch
+    # project root to pick up changes from your dev environment
+    # (e.g., ../dispatch-root)
+    context: https://github.com/Netflix/dispatch.git#develop:.
   image: dispatch-local
   depends_on:
     - postgres
@@ -14,6 +18,8 @@ x-dispatch-defaults: &dispatch_defaults
 services:
   postgres:
     <<: *restart_policy
+    env_file:
+      - .env
     image: "postgres:9.6"
     ports:
       - "5432:5432"
@@ -22,8 +28,10 @@ services:
     env_file: ./.env
   web:
     <<: *dispatch_defaults
+    command: ["server", "start", "dispatch.main:app"]
   dispatch-scheduler:
     <<: *dispatch_defaults
+    command: ["scheduler", "start"]
 volumes:
   dispatch-postgres:
     external: true
