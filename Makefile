@@ -6,7 +6,7 @@ NO_COLOR=\033[0m
 
 build:
 	@printf "$(OK_COLOR)==>$(NO_COLOR) Building $(REPOSITORY):$(TAG)\n"
-	@docker build --pull --rm -t $(REPOSITORY):$(TAG) . --build-arg DISPATCH_IMAGE=dispatch:latest
+	@docker build --pull --rm -t $(REPOSITORY):$(TAG) .
 
 $(REPOSITORY)_$(TAG).tar: build
 	@printf "$(OK_COLOR)==>$(NO_COLOR) Saving $(REPOSITORY):$(TAG) > $@\n"
