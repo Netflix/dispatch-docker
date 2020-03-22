@@ -78,7 +78,6 @@ echo ""
 # Build the dispatch image first
 # Once successfully built these lines can be commented out
 docker-compose pull --ignore-pull-failures
-docker-compose build --force-rm web
 docker-compose build --force-rm
 echo ""
 echo "Docker images built."
