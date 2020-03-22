@@ -1,20 +1,6 @@
 version: "3.4"
 x-restart-policy: &restart_policy
   restart: unless-stopped
-x-dispatch-defaults: &dispatch_defaults
-  <<: *restart_policy
-  env_file:
-    - .env
-  build:
-    # Pro-tip: point this to a relative directory containing the Dispatch
-    # project root to pick up changes from your dev environment
-    # (e.g., ../dispatch-root)
-    context: https://github.com/Netflix/dispatch.git#develop:.
-  image: dispatch-local
-  depends_on:
-    - postgres
-  env_file:
-    - .env
 services:
   postgres:
     <<: *restart_policy
@@ -25,12 +11,33 @@ services:
       - "5432:5432"
     volumes:
       - "dispatch-postgres:/var/lib/postgresql/data"
-    env_file: ./.env
   web:
-    <<: *dispatch_defaults
+    <<: *restart_policy
+    build:
+      # Pro-tip: point this to a relative directory containing the Dispatch
+      # project root to pick up changes from your dev environment
+      # (e.g., ../dispatch-root)
+      context: https://github.com/Netflix/dispatch.git#develop:.
+    image: dispatch-local-web
+    depends_on:
+      - postgres
+    env_file:
+      - .env
     command: ["server", "start", "dispatch.main:app"]
-  dispatch-scheduler:
-    <<: *dispatch_defaults
+  scheduler:
+    <<: *restart_policy
+    build:
+      # Pro-tip: point this to a relative directory containing the Dispatch
+      # project root to pick up changes from your dev environment
+      # (e.g., ../dispatch-root)
+      context: https://github.com/Netflix/dispatch.git#develop:.
+      args:
+        DISPATCH_LIGHT_BUILD: "1"
+    image: dispatch-local-scheduler
+    depends_on:
+      - postgres
+    env_file:
+      - .env
     command: ["scheduler", "start"]
 volumes:
   dispatch-postgres:
