@@ -35,7 +35,7 @@ function ensure_file_from_example {
     echo "$1 already exists, skipped creation."
   else
     echo "Creating $1..."
-    cp -n $(echo "$1" | sed 's/\.[^.]*$/.example&/') "$1"
+    cp -n $(echo "$1" | sed 's/\.[^.]*$/&.example/') "$1"
   fi
 }
 
@@ -54,16 +54,16 @@ if [ "$RAM_AVAILABLE_IN_DOCKER" -lt "$MIN_RAM" ]; then
     exit -1
 fi
 
+echo ""
+ensure_file_from_example $DISPATCH_CONFIG_ENV
+ensure_file_from_example $DISPATCH_EXTRA_REQUIREMENTS
+
 # Clean up old stuff and ensure nothing is working while we install/update
 docker-compose down --rmi local --remove-orphans
 
 echo ""
 echo "Creating volumes for persistent storage..."
 echo "Created $(docker volume create --name=dispatch-postgres)."
-
-echo ""
-ensure_file_from_example $DISPATCH_CONFIG_ENV
-ensure_file_from_example $DISPATCH_EXTRA_REQUIREMENTS
 
 echo ""
 echo "Generating secret key..."
