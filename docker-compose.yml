@@ -23,7 +23,9 @@ services:
       - postgres
     env_file:
       - .env
-    command: ["server", "start", "dispatch.main:app"]
+    command: ["server", "start", "dispatch.main:app", "--host=0.0.0.0"]
+    ports:
+      - "80:8000"
   scheduler:
     <<: *restart_policy
     build:
