@@ -69,7 +69,8 @@ echo ""
 echo "Generating secret key..."
 # This is to escape the secret key to be used in sed below
 SECRET_KEY=$(head /dev/urandom | env LC_CTYPE=C tr -dc "a-z0-9@#%^&*(-_=+)" | head -c 50 | sed -e 's/[\/&]/\\&/g')
-sed '/^SECRET_KEY=/{h;s/=.*/='"'$SECRET_KEY'"'/};${x;/^$/{s//SECRET_KEY='"'$SECRET_KEY'"'/;H};x}' $DISPATCH_CONFIG_ENV
+sed -i '/^SECRET_KEY=/{h;s/=.*/='"'$SECRET_KEY'"'/};${x;/^$/{s//SECRET_KEY='"'$SECRET_KEY'"'/;H};x}' $DISPATCH_CONFIG_ENV
+
 echo "Secret key written to $DISPATCH_CONFIG_ENV"
 
 echo ""
