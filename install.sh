@@ -109,10 +109,8 @@ fi
 echo ""
 echo "Setting up database..."
 if [ $CI ]; then
-  docker-compose run web --help
   docker-compose run web database upgrade --no-input
 else
-  docker-compose run web --help
   docker-compose run web database upgrade
 fi
 
