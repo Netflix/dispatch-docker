@@ -29,13 +29,12 @@ RAM_AVAILABLE_IN_DOCKER=$(docker run --rm busybox free -m 2>/dev/null | awk '/Me
 # Compare dot-separated strings - function below is inspired by https://stackoverflow.com/a/37939589/808368
 function ver () { echo "$@" | awk -F. '{ printf("%d%03d%03d", $1,$2,$3); }'; }
 
-# Thanks to https://stackoverflow.com/a/25123013/90297 for the quick `sed` pattern
 function ensure_file_from_example {
   if [ -f "$1" ]; then
     echo "$1 already exists, skipped creation."
   else
     echo "Creating $1..."
-    cp -n $(echo "$1" | sed 's/\.[^.]*$/&.example/') "$1"
+    cp -n $(echo "$1".example) "$1"
   fi
 }
 
