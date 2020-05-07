@@ -68,7 +68,12 @@ echo ""
 echo "Generating secret key..."
 # This is to escape the secret key to be used in sed below
 SECRET_KEY=$(head /dev/urandom | env LC_CTYPE=C tr -dc "a-z0-9@#%^&*(-_=+)" | head -c 50 | sed -e 's/[\/&]/\\&/g')
-sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=\"$SECRET_KEY\"/" $DISPATCH_CONFIG_ENV
+# We check the OS type and adjust the sed command accordingly
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=\"${SECRET_KEY}\"/" $DISPATCH_CONFIG_ENV
+else
+    sed -i "s/^SECRET_KEY=.*/SECRET_KEY=\"${SECRET_KEY}\"/" $DISPATCH_CONFIG_ENV
+fi
 
 echo "Secret key written to $DISPATCH_CONFIG_ENV"
 
