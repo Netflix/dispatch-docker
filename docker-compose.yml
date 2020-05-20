@@ -40,6 +40,8 @@ services:
       - postgres
     env_file:
       - .env
+    environment:
+      - STATIC_DIR=
     command: ["scheduler", "start"]
 volumes:
   dispatch-postgres:
