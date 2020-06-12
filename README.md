@@ -17,9 +17,13 @@ To get started with all the defaults, simply clone the repo and run `./install.s
 
 There may need to be modifications to the included example config files (`.env`) to accommodate your needs or your environment (such as adding Google credentials). If you want to perform these, do them before you run the install script and copy them without the `.example` extensions in the name before running the `install.sh` script.
 
+
 ## Data
 
 By default Dispatch does not come with any data. If you're looking for some example data, please use the postgres dump file located [here](https://github.com/Netflix/dispatch/blob/develop/data/dispatch-sample-data.dump) to load example data.
+
+### Starting with a clean database
+If you decide to start with a clean database, you will need a user. To create a user, go to http://localhost:8000/register.
 
 ## Securing Dispatch with SSL/TLS
 
