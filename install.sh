@@ -118,6 +118,11 @@ else
   docker-compose run web database upgrade
 fi
 
+echo ""
+echo "Installing plugins..."
+  docker-compose run web plugins install
+fi
+
 cleanup
 
 echo ""
