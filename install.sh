@@ -120,8 +120,7 @@ fi
 
 echo ""
 echo "Installing plugins..."
-  docker-compose run web plugins install
-fi
+docker-compose run web plugins install
 
 cleanup
 
