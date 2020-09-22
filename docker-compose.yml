@@ -17,7 +17,7 @@ services:
       # Pro-tip: point this to a relative directory containing the Dispatch
       # project root to pick up changes from your dev environment
       # (e.g., ../dispatch-root)
-      context: https://github.com/Netflix/dispatch.git#master:.
+      context: https://github.com/Netflix/dispatch.git#v20200922.1
     image: dispatch-local-web
     depends_on:
       - postgres
@@ -32,7 +32,7 @@ services:
       # Pro-tip: point this to a relative directory containing the Dispatch
       # project root to pick up changes from your dev environment
       # (e.g., ../dispatch-root)
-      context: https://github.com/Netflix/dispatch.git#master:.
+      context: https://github.com/Netflix/dispatch.git#v20200922.1
       args:
         DISPATCH_LIGHT_BUILD: "1"
     image: dispatch-local-scheduler
