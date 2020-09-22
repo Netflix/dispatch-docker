@@ -118,7 +118,16 @@ echo "Setting up database..."
 if [ $CI ]; then
   docker-compose run web database upgrade --no-input
 else
-  docker-compose run web database upgrade
+  read -p "Do you want to load example data (y/n)?" CONT
+  if [ "$CONT" = "y" ]; then
+    wget https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
+    export PGPASSWORD='dispatch'
+    createdb -h localhost -p 5432 -U dispatch dispatch
+    psql -h localhost -p 5432 -U dispatch -d dispatch -v ./dispatch-sample-data.dump
+    echo "Example data loaded. Navigate to /register and create a new user."
+  else
+    docker-compose run web database upgrade
+  fi
 fi
 
 echo ""
