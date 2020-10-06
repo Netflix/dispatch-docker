@@ -11,16 +11,22 @@ services:
       - "5432:5432"
     volumes:
       - "dispatch-postgres:/var/lib/postgresql/data"
-  web:
-    <<: *restart_policy
+  core:
+    image: dispatch-local
+    env_file:
+      - .env
     build:
       # Pro-tip: point this to a relative directory containing the Dispatch
       # project root to pick up changes from your dev environment
       # (e.g., ../dispatch-root)
-      context: https://github.com/Netflix/dispatch.git#v20201001
-    image: dispatch-local-web
+      #context: https://github.com/Netflix/dispatch.git#v20201001
+      context: ../dispatch
+  web:
+    <<: *restart_policy
+    image: dispatch-local
     depends_on:
       - postgres
+      - core
     env_file:
       - .env
     command: ["server", "start", "dispatch.main:app", "--host=0.0.0.0"]
@@ -28,16 +34,10 @@ services:
       - "8000:8000"
   scheduler:
     <<: *restart_policy
-    build:
-      # Pro-tip: point this to a relative directory containing the Dispatch
-      # project root to pick up changes from your dev environment
-      # (e.g., ../dispatch-root)
-      context: https://github.com/Netflix/dispatch.git#v20201001
-      args:
-        DISPATCH_LIGHT_BUILD: "1"
-    image: dispatch-local-scheduler
+    image: dispatch-local
     depends_on:
       - postgres
+      - core
     env_file:
       - .env
     environment:
