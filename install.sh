@@ -71,11 +71,11 @@ SECRET_KEY=$(openssl rand --hex 30)
 DISPATCH_JWT_SECRET=$(openssl rand --hex 30)
 # We check the OS type and adjust the sed command accordingly
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=\"${SECRET_KEY}\"/" $DISPATCH_CONFIG_ENV
-    sed -i '' "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=\"${DISPATCH_JWT_SECRET}\"/" $DISPATCH_CONFIG_ENV
+    sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=${SECRET_KEY}/" $DISPATCH_CONFIG_ENV
+    sed -i '' "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=${DISPATCH_JWT_SECRET}/" $DISPATCH_CONFIG_ENV
 else
-    sed -i "s/^SECRET_KEY=.*/SECRET_KEY=\"${SECRET_KEY}\"/" $DISPATCH_CONFIG_ENV
-    sed -i "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=\"${DISPATCH_JWT_SECRET}\"/" $DISPATCH_CONFIG_ENV
+    sed -i "s/^SECRET_KEY=.*/SECRET_KEY=${SECRET_KEY}/" $DISPATCH_CONFIG_ENV
+    sed -i "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=${DISPATCH_JWT_SECRET}/" $DISPATCH_CONFIG_ENV
 fi
 
 echo "Secret keys written to $DISPATCH_CONFIG_ENV"
@@ -118,7 +118,7 @@ echo "Setting up database..."
 if [ $CI ]; then
   docker-compose run web database upgrade --no-input
 else
-  read -p "Do you want to load example data (y/n)?" CONT
+  read -p "Do you want to load example data (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
     wget https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
@@ -126,13 +126,14 @@ else
     psql -h localhost -p 5432 -U dispatch -d dispatch -v ./dispatch-sample-data.dump
     echo "Example data loaded. Navigate to /register and create a new user."
   else
-    docker-compose run web database upgrade
+    echo "Running standard database migrations..."
+    docker-compose run --rm web database upgrade
   fi
 fi
 
 echo ""
 echo "Installing plugins..."
-docker-compose run web plugins install
+docker-compose run --rm web plugins install
 
 cleanup
 
@@ -141,4 +142,9 @@ echo "----------------"
 echo "You're all done! Run the following command to get Dispatch running:"
 echo ""
 echo "  docker-compose up -d"
+echo ""
+echo "Once running, access the Dispatch UI at:"
+echo ""
+echo "  http://localhost:8000/register"
+echo "----------------"
 echo ""
