@@ -67,8 +67,8 @@ echo "Created $(docker volume create --name=dispatch-postgres)."
 echo ""
 echo "Generating secret keys..."
 # This is to escape the secret key to be used in sed below
-SECRET_KEY=$(openssl rand --hex 30)
-DISPATCH_JWT_SECRET=$(openssl rand --hex 30)
+SECRET_KEY=$(openssl rand -hex 30)
+DISPATCH_JWT_SECRET=$(openssl rand -hex 30)
 # We check the OS type and adjust the sed command accordingly
 if [[ "$OSTYPE" == "darwin"* ]]; then
     sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=${SECRET_KEY}/" $DISPATCH_CONFIG_ENV
