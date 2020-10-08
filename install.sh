@@ -81,14 +81,12 @@ fi
 echo "Secret keys written to $DISPATCH_CONFIG_ENV"
 
 echo ""
-echo "Building and tagging Docker images..."
+echo "Pulling, building, and tagging Docker images..."
 echo ""
-# Build the dispatch image first
-# Once successfully built these lines can be commented out
-docker-compose pull --ignore-pull-failures
+docker-compose pull postgres
 docker-compose build --force-rm
 echo ""
-echo "Docker images built."
+echo "Docker images pulled and built."
 
 docker-compose up -d postgres
 
