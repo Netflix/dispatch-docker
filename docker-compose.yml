@@ -19,7 +19,7 @@ services:
       # Pro-tip: point this to a relative directory containing the Dispatch
       # project root to pick up changes from your dev environment
       # (e.g., ../dispatch-root)
-      context: https://github.com/Netflix/dispatch.git#v20201001
+      context: https://github.com/Netflix/dispatch.git#v20201013
   web:
     <<: *restart_policy
     image: dispatch-local
