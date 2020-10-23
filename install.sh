@@ -118,7 +118,7 @@ if [ $CI ]; then
 else
   read -p "Do you want to load example data (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
-    wget https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
+    curl -O https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
     createdb -h localhost -p 5432 -U dispatch dispatch
     psql -h localhost -p 5432 -U dispatch -d dispatch -v ./dispatch-sample-data.dump
