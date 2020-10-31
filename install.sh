@@ -120,7 +120,7 @@ else
   if [ "$CONT" = "y" ]; then
     curl -O https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
-    createdb -h localhost -p 5432 -U dispatch dispatch
+#     createdb -h localhost -p 5432 -U dispatch dispatch
     psql -h localhost -p 5432 -U dispatch -d dispatch -f ./dispatch-sample-data.dump
     echo "Example data loaded. Navigate to /register and create a new user."
   else
