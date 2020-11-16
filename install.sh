@@ -118,9 +118,14 @@ if [ $CI ]; then
 else
   read -p "Do you want to load example data (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
+    echo "Downloading example data from Dispatch repository..."
     curl -O https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
+    echo "Dropping database dispatch if it already exists..."
+    dropdb -h localhost -p 5432 -U dispatch dispatch --if-exists
+    echo "Creating dispatch database..."
     createdb -h localhost -p 5432 -U dispatch dispatch
+    echo "Loading example data to the database..."
     psql -h localhost -p 5432 -U dispatch -d dispatch -f ./dispatch-sample-data.dump
     echo "Example data loaded. Navigate to /register and create a new user."
   else
