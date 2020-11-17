@@ -116,7 +116,7 @@ echo "Setting up database..."
 if [ $CI ]; then
   docker-compose run web database upgrade --no-input
 else
-  read -p "Do you want to load example data (y/N)?" CONT
+  read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
     echo "Downloading example data from Dispatch repository..."
     curl -O https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
