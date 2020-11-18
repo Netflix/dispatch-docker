@@ -128,10 +128,8 @@ else
     echo "Loading example data to the database..."
     psql -h localhost -p 5432 -U dispatch -d dispatch -f ./dispatch-sample-data.dump
     echo "Example data loaded. Navigate to /register and create a new user."
-  else
-    echo "Running standard database migrations..."
-    docker-compose run --rm web database upgrade
-  fi
+  echo "Running standard database migrations..."
+  docker-compose run --rm web database upgrade
 fi
 
 echo ""
