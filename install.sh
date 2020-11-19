@@ -119,7 +119,7 @@ else
   read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
     echo "Downloading example data from Dispatch repository..."
-    curl -O https://raw.githubusercontent.com/Netflix/dispatch/master/data/dispatch-sample-data.dump
+    curl -O https://raw.githubusercontent.com/Netflix/dispatch/latest/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
     echo "Dropping database dispatch if it already exists..."
     dropdb -h localhost -p 5432 -U dispatch dispatch --if-exists
