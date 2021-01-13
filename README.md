@@ -6,7 +6,6 @@ Official bootstrap for running your own `Dispatch` with [Docker](https://www.doc
 
 - Docker 17.05.0+
 - Compose 1.19.0+
-- [PostgreSQL Client Applications](https://www.postgresql.org/docs/current/reference-client.html). They're included with PostgreSQL, which can be downloaded from [here](https://www.postgresql.org/download/).
 
 ## Minimum Hardware Requirements:
 
