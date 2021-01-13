@@ -122,11 +122,11 @@ else
     curl -O https://raw.githubusercontent.com/Netflix/dispatch/latest/data/dispatch-sample-data.dump
     export PGPASSWORD='dispatch'
     echo "Dropping database dispatch if it already exists..."
-    dropdb -h localhost -p 5432 -U dispatch dispatch --if-exists
+    docker-compose run -e PGPASSWORD='dispatch' --rm postgres dropdb -h postgres -p 5432 -U dispatch dispatch --if-exists
     echo "Creating dispatch database..."
-    createdb -h localhost -p 5432 -U dispatch dispatch
+    docker-compose run -e PGPASSWORD='dispatch' --rm postgres createdb -h postgres -p 5432 -U dispatch dispatch
     echo "Loading example data to the database..."
-    psql -h localhost -p 5432 -U dispatch -d dispatch -f ./dispatch-sample-data.dump
+    docker-compose run -e PGPASSWORD='dispatch' -v "$(pwd)/dispatch-sample-data.dump:/dispatch-sample-data.dump" --rm postgres psql -h postgres -p 5432 -U dispatch -d dispatch -f /dispatch-sample-data.dump
     echo "Example data loaded. Navigate to /register and create a new user."
   fi
   echo "Running standard database migrations..."
