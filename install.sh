@@ -8,6 +8,10 @@ MIN_RAM=2400 # MB
 DISPATCH_CONFIG_ENV='./.env'
 DISPATCH_EXTRA_REQUIREMENTS='./requirements.txt'
 
+DISPATCH_DB_PASSWORD='dispatch'
+DISPATCH_DB_SAMPLE_DATA_URL='https://raw.githubusercontent.com/Netflix/dispatch/latest/data/dispatch-sample-data.dump'
+DISPATCH_DB_SAMPLE_DATA_FILE='dispatch-sample-data.dump'
+
 DID_CLEAN_UP=0
 # the cleanup function will be the exit point
 cleanup () {
@@ -119,13 +123,13 @@ else
   read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
     echo "Downloading example data from Dispatch repository..."
-    curl -O https://raw.githubusercontent.com/Netflix/dispatch/latest/data/dispatch-sample-data.dump
+    curl -o "./$DISPATCH_DB_SAMPLE_DATA_FILE" "$DISPATCH_DB_SAMPLE_DATA_URL"
     echo "Dropping database dispatch if it already exists..."
-    docker-compose run -e PGPASSWORD='dispatch' --rm postgres dropdb -h postgres -p 5432 -U dispatch dispatch --if-exists
+    docker-compose run -e "PGPASSWORD=$DISPATCH_DB_PASSWORD" --rm postgres dropdb -h postgres -p 5432 -U dispatch dispatch --if-exists
     echo "Creating dispatch database..."
-    docker-compose run -e PGPASSWORD='dispatch' --rm postgres createdb -h postgres -p 5432 -U dispatch dispatch
+    docker-compose run -e "PGPASSWORD=$DISPATCH_DB_PASSWORD" --rm postgres createdb -h postgres -p 5432 -U dispatch dispatch
     echo "Loading example data to the database..."
-    docker-compose run -e PGPASSWORD='dispatch' -v "$(pwd)/dispatch-sample-data.dump:/dispatch-sample-data.dump" --rm postgres psql -h postgres -p 5432 -U dispatch -d dispatch -f /dispatch-sample-data.dump
+    docker-compose run -e "PGPASSWORD=$DISPATCH_DB_PASSWORD" -v "$(pwd)/$DISPATCH_DB_SAMPLE_DATA_FILE:/$DISPATCH_DB_SAMPLE_DATA_FILE" --rm postgres psql -h postgres -p 5432 -U dispatch -d dispatch -f "/$DISPATCH_DB_SAMPLE_DATA_FILE"
     echo "Example data loaded. Navigate to /register and create a new user."
   fi
   echo "Running standard database migrations..."
