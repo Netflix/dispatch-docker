@@ -9,8 +9,8 @@ DISPATCH_CONFIG_ENV='./.env'
 DISPATCH_EXTRA_REQUIREMENTS='./requirements.txt'
 
 DISPATCH_DB_PASSWORD='dispatch'
-DISPATCH_DB_SAMPLE_DATA_URL='https://raw.githubusercontent.com/Netflix/dispatch/latest/data/dispatch-sample-data.dump'
 DISPATCH_DB_SAMPLE_DATA_FILE='dispatch-sample-data.dump'
+DISPATCH_DB_SAMPLE_DATA_URL="https://raw.githubusercontent.com/Netflix/dispatch/latest/data/${DISPATCH_DB_SAMPLE_DATA_FILE}"
 
 DID_CLEAN_UP=0
 # the cleanup function will be the exit point
