@@ -123,7 +123,7 @@ if [ $CI ]; then
 else
   read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
-    source '.env'
+    source $DISPATCH_CONFIG_ENV
     echo "Downloading example data from Dispatch repository..."
     curl -o "./$DISPATCH_DB_SAMPLE_DATA_FILE" "$DISPATCH_DB_SAMPLE_DATA_URL"
     echo "Dropping database dispatch if it already exists..."
