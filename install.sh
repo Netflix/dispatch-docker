@@ -125,7 +125,7 @@ else
   if [ "$CONT" = "y" ]; then
     source $DISPATCH_CONFIG_ENV
     echo "Downloading example data from Dispatch repository..."
-    curl -o "./$DISPATCH_DB_SAMPLE_DATA_FILE" "$DISPATCH_DB_SAMPLE_DATA_URL"
+    curl -# -o "./$DISPATCH_DB_SAMPLE_DATA_FILE" "$DISPATCH_DB_SAMPLE_DATA_URL"
     echo "Dropping database dispatch if it already exists..."
     docker-compose run -e "PGPASSWORD=$POSTGRES_PASSWORD" --rm postgres dropdb -h $DATABASE_HOSTNAME -p $DATABASE_PORT -U $POSTGRES_USER $DATABASE_NAME --if-exists
     echo "Creating dispatch database..."
