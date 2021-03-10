@@ -66,3 +66,4 @@ data/
 .vscode/tags
 
 .env
+dispatch-sample-data.dump
