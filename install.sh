@@ -58,7 +58,7 @@ function fill_uninitialised_secret {
         sed $sed_suffix_arg "s/^${secret_name}=.*/${secret_name}=${!secret_name}/" $DISPATCH_CONFIG_ENV
         echo "${secret_name} written to $DISPATCH_CONFIG_ENV"
     else
-        echo "Leaving existing ${secret_name}"
+        echo "Leaving existing ${secret_name}..."
     fi
 }
 
