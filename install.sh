@@ -43,6 +43,26 @@ function ensure_file_from_example {
   fi
 }
 
+# Handle OSX sed
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed_suffix_arg="-i ''"
+else
+    sed_suffix_arg="-i"
+fi
+
+function fill_uninitialised_secret {
+    secret_name=$1
+    if [ -z ${!secret_name} ] || [ ${!secret_name} == "REPLACEWITHSOMETHIINGSECRET" ]; then
+        echo "Generating ${secret_name}..."
+        declare ${secret_name}=$(openssl rand -hex 30)
+        sed $sed_suffix_arg "s/^${secret_name}=.*/${secret_name}=${!secret_name}/" $DISPATCH_CONFIG_ENV
+        echo "${secret_name} written to $DISPATCH_CONFIG_ENV"
+    else
+        echo "Leaving existing ${secret_name}..."
+    fi
+}
+
+
 if [ $(ver $DOCKER_VERSION) -lt $(ver $MIN_DOCKER_VERSION) ]; then
     echo "FAIL: Expected minimum Docker version to be $MIN_DOCKER_VERSION but found $DOCKER_VERSION"
     exit -1
@@ -61,6 +81,7 @@ fi
 echo ""
 ensure_file_from_example $DISPATCH_CONFIG_ENV
 ensure_file_from_example $DISPATCH_EXTRA_REQUIREMENTS
+source $DISPATCH_CONFIG_ENV
 
 # Clean up old stuff and ensure nothing is working while we install/update
 docker-compose down --rmi local --remove-orphans
@@ -70,20 +91,8 @@ echo "Creating volumes for persistent storage..."
 echo "Created $(docker volume create --name=dispatch-postgres)."
 
 echo ""
-echo "Generating secret keys..."
-# This is to escape the secret key to be used in sed below
-SECRET_KEY=$(openssl rand -hex 30)
-DISPATCH_JWT_SECRET=$(openssl rand -hex 30)
-# We check the OS type and adjust the sed command accordingly
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s/^SECRET_KEY=.*/SECRET_KEY=${SECRET_KEY}/" $DISPATCH_CONFIG_ENV
-    sed -i '' "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=${DISPATCH_JWT_SECRET}/" $DISPATCH_CONFIG_ENV
-else
-    sed -i "s/^SECRET_KEY=.*/SECRET_KEY=${SECRET_KEY}/" $DISPATCH_CONFIG_ENV
-    sed -i "s/^DISPATCH_JWT_SECRET=.*/DISPATCH_JWT_SECRET=${DISPATCH_JWT_SECRET}/" $DISPATCH_CONFIG_ENV
-fi
-
-echo "Secret keys written to $DISPATCH_CONFIG_ENV"
+fill_uninitialised_secret "SECRET_KEY"
+fill_uninitialised_secret "DISPATCH_JWT_SECRET"
 
 echo ""
 echo "Pulling, building, and tagging Docker images..."
@@ -123,7 +132,6 @@ if [ $CI ]; then
 else
   read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
-    source $DISPATCH_CONFIG_ENV
     echo "Downloading example data from Dispatch repository..."
     curl -# -o "./$DISPATCH_DB_SAMPLE_DATA_FILE" "$DISPATCH_DB_SAMPLE_DATA_URL"
     echo "Dropping database dispatch if it already exists..."
