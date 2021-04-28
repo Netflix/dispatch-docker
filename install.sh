@@ -127,9 +127,7 @@ fi
 
 echo ""
 echo "Setting up database..."
-if [ $CI ]; then
-  docker-compose run web database upgrade --no-input
-else
+if [ ! $CI ]; then
   read -p "Do you want to load example data (WARNING: this will remove all existing database data) (y/N)?" CONT
   if [ "$CONT" = "y" ]; then
     echo "Downloading example data from Dispatch repository..."
@@ -142,9 +140,9 @@ else
     docker-compose run -e "PGPASSWORD=$POSTGRES_PASSWORD" -v "$(pwd)/$DISPATCH_DB_SAMPLE_DATA_FILE:/$DISPATCH_DB_SAMPLE_DATA_FILE" --rm postgres psql -h $DATABASE_HOSTNAME -p $DATABASE_PORT -U $POSTGRES_USER -d $DATABASE_NAME -f "/$DISPATCH_DB_SAMPLE_DATA_FILE"
     echo "Example data loaded. Navigate to /register and create a new user."
   fi
-  echo "Running standard database migrations..."
-  docker-compose run --rm web database upgrade
 fi
+echo "Running standard database migrations..."
+docker-compose run --rm web database upgrade
 
 echo ""
 echo "Installing plugins..."
