@@ -2,6 +2,7 @@
 set -e
 
 COMPOSE_DOCKER_CLI_BUILD=0
+COMPOSE_BUILD_ARGS="$(grep -E '^(VUE_APP)' ${DISPATCH_CONFIG_ENV} | while read var ; do printf %b "--build-arg ${var} "; done)"
 
 MIN_DOCKER_VERSION='17.05.0'
 MIN_COMPOSE_VERSION='1.19.0'
@@ -98,7 +99,7 @@ echo ""
 echo "Pulling, building, and tagging Docker images..."
 echo ""
 docker-compose pull postgres
-docker-compose build --force-rm
+docker-compose build ${COMPOSE_BUILD_ARGS} --force-rm
 echo ""
 echo "Docker images pulled and built."
 
