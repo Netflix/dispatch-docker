@@ -2,7 +2,6 @@
 set -e
 
 COMPOSE_DOCKER_CLI_BUILD=0
-COMPOSE_BUILD_ARGS="$(grep -E '^(VUE_APP)' ${DISPATCH_CONFIG_ENV} | while read var ; do printf %b "--build-arg ${var} "; done)"
 
 MIN_DOCKER_VERSION='17.05.0'
 MIN_COMPOSE_VERSION='1.19.0'
@@ -10,6 +9,8 @@ MIN_RAM=2400 # MB
 
 DISPATCH_CONFIG_ENV='./.env'
 DISPATCH_EXTRA_REQUIREMENTS='./requirements.txt'
+
+COMPOSE_BUILD_ARGS="$(grep -E '^(VUE_APP)' ${DISPATCH_CONFIG_ENV} | while read var ; do printf %b "--build-arg ${var} "; done)"
 
 DISPATCH_DB_SAMPLE_DATA_FILE='dispatch-sample-data.dump'
 DISPATCH_DB_SAMPLE_DATA_URL="https://raw.githubusercontent.com/Netflix/dispatch/latest/data/${DISPATCH_DB_SAMPLE_DATA_FILE}"
