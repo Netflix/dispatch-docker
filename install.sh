@@ -141,6 +141,9 @@ if [ ! $CI ]; then
     echo "Loading example data to the database..."
     docker-compose run -e "PGPASSWORD=$POSTGRES_PASSWORD" -v "$(pwd)/$DISPATCH_DB_SAMPLE_DATA_FILE:/$DISPATCH_DB_SAMPLE_DATA_FILE:Z" --rm postgres psql -h $DATABASE_HOSTNAME -p $DATABASE_PORT -U $POSTGRES_USER -d $DATABASE_NAME -f "/$DISPATCH_DB_SAMPLE_DATA_FILE"
     echo "Example data loaded. Navigate to /register and create a new user."
+  else
+    echo "Initializing the database"
+    docker-compose run --rm web database init
   fi
 fi
 echo "Running standard database migrations..."
