@@ -21,9 +21,11 @@ There may need to be modifications to the included example config files (`.env`)
 
 By default Dispatch does not come with any data. If you're looking for some example data, please use the postgres dump file located [here](https://github.com/Netflix/dispatch/blob/master/data/dispatch-sample-data.dump) to load example data.
 
+Note: when running the `install.sh` file, you will be asked whether to load this database dump, or to initialize a new database.
+
 ### Starting with a clean database
 
-If you decide to start with a clean database, you will need a user. To create a user, go to http://localhost:8000/register.
+If you decide to start with a clean database, you will need a user. To create a user, go to http://localhost:8000/default/auth/register.
 
 ## Securing Dispatch with SSL/TLS
 
